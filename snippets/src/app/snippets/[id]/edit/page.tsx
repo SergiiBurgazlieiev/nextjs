@@ -1,6 +1,6 @@
 import { db } from '@/db';
 import { notFound } from 'next/navigation';
-import SnippetEditForm from '@/components/SnippetEditForm';
+import SnippetEditForm from '@/components/snippet-edit-form';
 
 interface SnippetEditPageProps {
 	params: Promise<{ id: string }>;

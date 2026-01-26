@@ -1,6 +1,7 @@
 import { db } from '@/db';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { deleteSnippet } from '@/actions';
 
 interface SnippetShowPageProps {
 	params: Promise<{ id: string }>;
@@ -8,14 +9,17 @@ interface SnippetShowPageProps {
 
 export default async function SnippetShowPage(props: SnippetShowPageProps) {
 	const { id } = await props.params;
+	const parsedId = parseInt(id);
 	const snippet = await db.snippet.findFirst({
-		where: { id: parseInt(id) },
+		where: { id: parsedId },
 	});
 
 	// If snippet was not found return early and call notFound
 	if (!snippet) {
 		return notFound();
 	}
+
+	const deleteSnippetAction = deleteSnippet.bind(null, parsedId);
 
 	return (
 		<div>
@@ -28,9 +32,12 @@ export default async function SnippetShowPage(props: SnippetShowPageProps) {
 					>
 						Edit
 					</Link>
-					<button className='p-2 border rounded'>Delete</button>
+					<form action={deleteSnippetAction}>
+						<button className='p-2 border rounded'>Delete</button>
+					</form>
 				</div>
 			</div>
+
 			<pre className='p-3 border rounded bg-gray-200 border-gray-200'>
 				<code>{snippet.code}</code>
 			</pre>

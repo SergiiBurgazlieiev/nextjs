@@ -24,30 +24,43 @@ export const createSnippet = async (
 	formState: { message: string },
 	formData: FormData,
 ) => {
-	// 1. User entered a. valid input
-	const title = formData.get('title');
-	const code = formData.get('code');
+	try {
+		// 1. User entered a. valid input
+		const title = formData.get('title');
+		const code = formData.get('code');
 
-	if (typeof title !== 'string' || title.length < 3) {
-		return {
-			message: 'Title must be longer!',
-		};
+		// 2. Validate form fields
+		if (typeof title !== 'string' || title.length < 3) {
+			return {
+				message: 'Title must be longer!',
+			};
+		}
+
+		if (typeof code !== 'string' || code.length < 10) {
+			return {
+				message: 'Code must be longer!',
+			};
+		}
+
+		//3. Create a new record in the BD
+		await db.snippet.create({
+			data: {
+				title,
+				code,
+			},
+		});
+	} catch (err: unknown) {
+		if (err instanceof Error) {
+			return {
+				message: err.message,
+			};
+		} else {
+			return {
+				message: 'Something went wrong!',
+			};
+		}
 	}
 
-	if (typeof code !== 'string' || code.length < 10) {
-		return {
-			message: 'Code must be longer!',
-		};
-	}
-
-	// 2. Create a new record in the BD
-	await db.snippet.create({
-		data: {
-			title,
-			code,
-		},
-	});
-
-	// 3. Take user back to the Home Page
+	// 4. Take user back to the Home Page
 	redirect('/');
 };

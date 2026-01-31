@@ -17,7 +17,7 @@ export default function TopicCreateForm() {
 			<PopoverContent>
 				<form action={createTopic}>
 					<div className='flex flex-col gap-4 p-4 w-80'>
-						<h3 className='text-lg'>Create a Topic </h3>
+						<h3 className='text-lg'>Create a Topic</h3>
 						<Input label='Name' labelPlacement='outside' placeholder='Name' />
 						<Textarea
 							label='Description'

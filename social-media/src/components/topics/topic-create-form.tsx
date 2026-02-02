@@ -13,7 +13,7 @@ import { useActionState, startTransition } from 'react';
 import { createTopic } from '@/actions';
 
 export default function TopicCreateForm() {
-	const [formState, action] = useActionState(createTopic, {
+	const [formState, action, isPending] = useActionState(createTopic, {
 		errors: {},
 	});
 
@@ -51,7 +51,7 @@ export default function TopicCreateForm() {
 						{formState.errors._form && (
 							<Alert color='danger'>{formState.errors._form?.join(', ')}</Alert>
 						)}
-						<Button type='submit' color='primary'>
+						<Button type='submit' color='primary' isLoading={isPending}>
 							Create Topic
 						</Button>
 					</div>

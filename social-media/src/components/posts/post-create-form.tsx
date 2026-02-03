@@ -2,19 +2,27 @@
 
 import { useActionState, startTransition } from 'react';
 import {
+	Input,
+	Alert,
 	Button,
 	Popover,
-	Input,
 	Textarea,
 	PopoverTrigger,
 	PopoverContent,
 } from '@nextui-org/react';
 import * as actions from '@/actions';
 
-export default function PostCreateForm() {
-	const [formState, action, isPending] = useActionState(actions.createPost, {
-		errors: {},
-	});
+interface PostCreateFormProps {
+	slug: string;
+}
+
+export default function PostCreateForm({ slug }: PostCreateFormProps) {
+	const [formState, action, isPending] = useActionState(
+		actions.createPost.bind(null, slug),
+		{
+			errors: {},
+		},
+	);
 
 	const onSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -50,6 +58,9 @@ export default function PostCreateForm() {
 							isInvalid={!!formState.errors.content}
 							errorMessage={formState.errors.content?.join(', ')}
 						/>
+						{formState.errors._form && (
+							<Alert color='danger'>{formState.errors._form?.join(', ')}</Alert>
+						)}
 						<Button color='primary' type='submit' isLoading={isPending}>
 							Create Post
 						</Button>

@@ -1,8 +1,14 @@
-import type { Post, User, Topic } from '@prisma/client';
 import Link from 'next/link';
 import paths from '@/paths';
+import type { PostWithData } from '@/db/queries/posts';
 
-export default function PostList() {
+interface PostListProps {
+	fetchDataFunc: () => Promise<PostWithData[]>;
+}
+
+export const PostList = async ({ fetchDataFunc }: PostListProps) => {
+	const posts = await fetchDataFunc();
+
 	const renderedPosts = posts.map((post) => {
 		const topicSlug = post.topic.slug;
 
@@ -26,4 +32,4 @@ export default function PostList() {
 	});
 
 	return <div className='space-y-2'>{renderedPosts}</div>;
-}
+};
